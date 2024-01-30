@@ -1,0 +1,7 @@
+export const DECLARE_FIELD = 'DECLARE_FIELD'
+export const DECLARE_FIELDS = 'DECLARE_FIELDS'
+export const EDIT_FIELD = 'EDIT_FIELD'
+export const RESET_FORM = 'RESET_FORM'
+export const SET_TOUCHED = 'SET_TOUCHED'
+export const UPDATE_ID = 'UPDATE_ID'
+export const DELETE = 'DELETE'
