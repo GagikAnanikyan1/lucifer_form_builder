@@ -1,18 +1,26 @@
 {
-  "name": "boomform-builder",
-  "version": "2.0.11",
-  "description": "Simple Form Builder",
-  "author": "BoomTechLLC",
+  "name": "lucifer_form_builder",
+  "version": "0.0.1",
+  "description": "Advanced Form Builder",
+  "author": "Lucifer",
   "license": "MIT",
-  "repository": "https://github.com/BoomTech-LLC/BoomForm-Builder",
+  "keywords": [
+    "forms",
+    "form",
+    "form builder",
+    "react",
+    "react-dom",
+    "hooks"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "build": "microbundle-crl --no-compress --format modern,cjs && cp src/index.d.ts dist/index.d.ts",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
