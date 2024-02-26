@@ -1,6 +1,6 @@
 {
   "name": "lucifer_form_builder",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Advanced Form Builder",
   "author": "Lucifer",
   "license": "MIT",
@@ -32,7 +32,8 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^16.0.0",
+    "react-grid-layout": "^1.4.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
@@ -53,7 +54,6 @@
     "prettier": "^2.6.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-grid-layout": "^1.4.2",
     "react-scripts": "^3.4.1"
   },
   "files": [
