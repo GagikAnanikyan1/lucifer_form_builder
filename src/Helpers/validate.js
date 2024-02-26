@@ -111,12 +111,15 @@ export const validate = ({ value, validation, type }) => {
 
       case 'regEx':
         const regex = validation['regEx']
-        console.log(regex)
-        regex.map((item) => {
-          if (!new RegExp(item.value).test(value)) {
-            return item.msg
-          }
-        })
+
+        if (regex) {
+          console.log(regex)
+          const errorItem = regex.find(
+            (item) => !new RegExp(item.value).test(value)
+          )
+          console.log('errorItem', errorItem)
+          return errorItem && errorItem.msg
+        }
         break
 
       case 'custom':
