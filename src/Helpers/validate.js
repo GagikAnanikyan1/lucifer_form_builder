@@ -1,76 +1,126 @@
-const validationFunctions = {
-  required: (value) => {
-    if (typeof value === 'string' && !value.trim()) return false
-    else return !!value
-  },
-  max: {
-    length: (value, parameter) => value.length <= parameter,
-    word: (value, parameter) => value.trim().split(' ').length <= parameter,
-    number: (value, parameter) =>
-      parseInt(value) <= parseInt(parameter) ||
-      (isNaN(parseInt(value)) && !!value)
-  },
-  min: {
-    length: (value, parameter) => value.length >= parameter,
-    word: (value, parameter) => value.trim().split(' ').length >= parameter,
-    number: (value, parameter) =>
-      parseInt(value) >= parseInt(parameter) ||
-      (isNaN(parseInt(value)) && !!value)
-  },
-  email: (value) =>
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
-      value
-    ),
-  phone: (value) => /^[0-9- ^*()+]{6,}$/i.test(value),
-  url: (value) =>
-    /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,5}[\.]{0,1}(.*))$/i.test(
-      value
-    ),
-  regEx: (value, parameter) => {
-    return new RegExp(parameter).test(value)
-  },
-  custom: (value, customFunction) => customFunction(value)
-}
-
 export const validate = ({ value, validation, type }) => {
+  // Sxal Check Chisht Cheka Petq
   if (!validation) return false
 
+  //Petqa Sirun Grvi
   if (type === 'checkbox' && value === false) {
     if (validation['required']) {
-      return validation['required'](value)
+      validation['required'].msg
     }
   }
 
   if (value === null) value = ''
 
   for (let item in validation) {
-    if (item !== 'regEx') {
-      const validator = validationFunctions[item]
-      const { type, msg, value: parameter } = validation[item]
+    const { type, msg, value: parameter } = validation[item]
+    switch (item) {
+      case 'required':
+        if (typeof value === 'string' && !value.trim()) return msg
+        else if (!value) return msg
+        break
 
-      if (validator) {
-        if (typeof validator === 'function') {
-          if (!validator(value, parameter)) return msg
-        } else if (validator[type] && !validator[type](value, parameter)) {
-          return msg
+      case 'max':
+        switch (type) {
+          case 'length':
+            if (
+              value !== null &&
+              value !== undefined &&
+              value !== '' &&
+              value.length > parameter
+            )
+              return msg
+            break
+          case 'word':
+            if (
+              value !== null &&
+              value !== undefined &&
+              value !== '' &&
+              value.trim().split(' ').length > parameter
+            )
+              return msg
+            break
+          case 'number':
+            if (
+              parseInt(value) > parseInt(parameter) ||
+              (isNaN(parseInt(value)) &&
+                value !== null &&
+                value !== undefined &&
+                value !== '')
+            )
+              return msg
+            break
         }
-      }
-    } else {
-      const validator = validationFunctions[item]
-      const validationValue = validation[item]
-      let message
-      if (typeof validator === 'function') {
-        validationValue.some((item) => {
-          const { value: regex, msg } = item
-          const isValid = validator(value, regex)
-          if (!isValid) {
-            message = msg
-          }
-          return !isValid
-        })
-      }
+        break
 
-      return message ? message : undefined
+      case 'min':
+        switch (type) {
+          case 'length':
+            if (
+              value !== null &&
+              value !== undefined &&
+              value !== '' &&
+              value.length < parameter
+            )
+              return msg
+            break
+          case 'word':
+            if (
+              value !== null &&
+              value !== undefined &&
+              value !== '' &&
+              value.trim().split(' ').length < parameter
+            )
+              return msg
+            break
+          case 'number':
+            if (
+              parseInt(value) < parseInt(parameter) ||
+              (isNaN(parseInt(value)) &&
+                value !== null &&
+                value !== undefined &&
+                value !== '')
+            )
+              return msg
+            break
+        }
+        break
+
+      case 'email':
+        if (
+          !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
+            value
+          ) &&
+          value
+        )
+          return msg
+        break
+
+      case 'phone':
+        if (!/^[0-9- ^*()+]{6,}$/i.test(value) && value) return msg
+        break
+
+      case 'url':
+        if (
+          !/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.([a-zA-Z]{2,5}[\.]{0,1}(.*))$/i.test(
+            value
+          ) &&
+          value
+        )
+          return msg
+        break
+
+      case 'regEx':
+        const regex = validation['regEx']
+        console.log(regex)
+        regex.map((item) => {
+          if (!new RegExp(item.value).test(value)) {
+            return item.msg
+          }
+        })
+        break
+
+      case 'custom':
+        return validation[item](value)
     }
   }
 }
