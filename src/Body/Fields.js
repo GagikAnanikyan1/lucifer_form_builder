@@ -52,15 +52,6 @@ const Fields = ({ fields, payment, printableFields, gridOptions }) => {
     width = 800,
     cols = 4
   } = gridOptions
-
-  console.log('Malmo')
-
-  if (gridOptions && typeof GridLayout !== 'function') {
-    throw new Error(
-      'For using grid layout you need to install react-grid-layout package'
-    )
-  }
-
   return (
     <>
       {printableFields.map((pageFields, index) => {

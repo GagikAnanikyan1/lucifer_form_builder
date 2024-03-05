@@ -1,35 +1,14 @@
 import React, { useState } from 'react'
-import { BoomForm, Input, useField } from 'boomform'
-
-const Barev = ({ x }) => {
-  const { neededValues } = useField(['qwe'])
-
-  console.log('neededValues', neededValues)
-
-  return <div>{x}</div>
-}
-
-const Hajox = () => {
-  const [x, setX] = useState(0)
-
-  return (
-    <>
-      <div onClick={() => setX(x + 1)}>Barev</div>
-      <Barev x={x} />
-      <Input id='qwe' placeholder='Barev' />
-    </>
-  )
-}
+import Sidebar from './Sidebar'
+import Content from './Content'
 
 const App = () => {
+  const [example, setExample] = useState({ name: 'Logic', option: 'logic' })
   return (
-    <BoomForm>
-      {({ updateId }) => (
-        <>
-          <Hajox />
-        </>
-      )}
-    </BoomForm>
+    <>
+      <Sidebar example={example} setExample={setExample} />
+      <Content example={example} />
+    </>
   )
 }
 
