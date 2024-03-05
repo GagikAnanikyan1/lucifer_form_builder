@@ -15,6 +15,7 @@ const Price = ({
   prefix = '$',
   separator = '.',
   classnamepreFix,
+  isDecimal = true,
   ...props
 }) => {
   return (
@@ -30,17 +31,21 @@ const Price = ({
           validation={getValidation(validations, 'first')}
         />
       </span>
-      <span>{separator}</span>
-      <span className='price__last'>
-        <Input
-          {...props}
-          id={`${id}.last`}
-          type='number'
-          placeholder={getPlaceholder(placeholders, 'last')}
-          initial={getInitial(initials, 'last')}
-          validation={getValidation(validations, 'last')}
-        />
-      </span>
+      {isDecimal && (
+        <>
+          <span>{separator}</span>
+          <span className='price__last'>
+            <Input
+              {...props}
+              id={`${id}.last`}
+              type='number'
+              placeholder={getPlaceholder(placeholders, 'last')}
+              initial={getInitial(initials, 'last')}
+              validation={getValidation(validations, 'last')}
+            />
+          </span>
+        </>
+      )}
     </>
   )
 }

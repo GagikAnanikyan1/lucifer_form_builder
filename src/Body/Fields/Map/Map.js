@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
+import React, { useEffect, useRef } from 'react'
 
 const Map = ({
   apiKey,
@@ -18,29 +18,41 @@ const Map = ({
       version: 'weekly'
     })
 
-    loader.load().then(() => {
-      const map = new google.maps.Map(mapRef.current, {
-        center: { lat, lng },
-        zoom: zoom
+    loader
+      .load()
+      .then(async () => {
+        const { AdvancedMarkerElement } = await google.maps.importLibrary(
+          'marker'
+        )
+        return {
+          AdvancedMarkerElement
+        }
       })
-      markers.map((item) => {
-        const { position, description } = item
-        const marker = new google.maps.Marker({
-          position,
-          map
+      .then(({ AdvancedMarkerElement }) => {
+        const map = new google.maps.Map(mapRef.current, {
+          center: { lat, lng },
+          zoom: zoom,
+          mapId:  Math.floor(Math.random() * 1000000)
+
         })
-        const infoWindow = new google.maps.InfoWindow({
-          content: description
-        })
-        marker.addListener('click', () => {
-          infoWindow.open({
-            anchor: marker,
-            map,
-            shouldFocus: false
+        markers.map((item) => {
+          const { position, description } = item
+          const marker = new AdvancedMarkerElement({
+            position,
+            map
+          })
+          const infoWindow = new google.maps.InfoWindow({
+            content: description
+          })
+          marker.addListener('click', () => {
+            infoWindow.open({
+              anchor: marker,
+              map,
+              shouldFocus: false
+            })
           })
         })
       })
-    })
   }, [zoom])
   return <div style={{ height }} ref={mapRef} />
 }
